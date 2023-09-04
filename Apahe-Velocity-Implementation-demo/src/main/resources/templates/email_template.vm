@@ -1,0 +1,27 @@
+<html>
+<body>
+<h1>Product Name ${product.name} and ${product.description}<h1>
+
+#if($!{product.description})
+<p>Product Description ${product.description}</p>
+#end
+
+<h3>Other Products</h3>
+
+<table border = "1">
+<tr>
+<td>Id</td>
+<td>Name</td>
+<td>Description</td>
+</tr>
+
+#foreach($prod in $productList)
+<tr>
+<td>${prod.id}</td>
+<td>${prod.name}</td>
+<td>${prod.description}</td>
+</tr>
+#end
+</table>
+</body>
+<html>
