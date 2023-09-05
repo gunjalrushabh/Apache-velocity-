@@ -67,12 +67,10 @@ public class ProductService {
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
         System.out.println(writer.toString());
-   
-   
+  
     }
     
   public void exportVelocityTemplateInHtml() {
-		
 
     	Product product = new Product(1, "Sample Product", "This is a sample product description");
      
@@ -113,6 +111,8 @@ public class ProductService {
 	  velocityContext.put("name", pobj.getName());
 	  velocityContext.put("description", pobj.getDescription());
 	  
+	  
+	  //json to ToString()
 	  Template template = Velocity.getTemplate("templates/jsonvm.vm");
 	  StringWriter writer = new StringWriter();
 	  template.merge(velocityContext, writer);
@@ -120,7 +120,7 @@ public class ProductService {
 	  
 	 
 	try {
-		 FileWriter writerjson = new FileWriter(new File("src/main/resources/template.json"));
+		 FileWriter writerjson = new FileWriter(new File("src/main/resources/templatevelocity.json"));
 		 template.merge(velocityContext, writerjson);
 		 writerjson.flush();
 		 writerjson.close();
@@ -128,8 +128,50 @@ public class ProductService {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	 
+  
+  }
+  
+  public String velocityToHtml() {
 	  
+	  Product pobj = new Product(100, "name", "description");
+	  List<Product> list =  new ArrayList<>();
+	
+	  Product p = new Product(200, "name - 200", "description - 200");
+	  Product p1 = new Product(300, "name - 300", "description - 300");
+	  list.add(p);
+	  list.add(p1);
+	  //List<Product> list = productRepository.findAll();
+	  
+	  Properties prop = new Properties();
+      prop.setProperty("resource.loader", "class");
+      prop.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+	  
+      Velocity.init(prop);
+	  VelocityContext velocityContext = new VelocityContext();
+	  velocityContext.put("product", pobj);
+	  velocityContext.put("productList", list);
+	  
+	  Template template = Velocity.getTemplate("templates/email_template.vm");
+	//template.merge(velocityContext, writer)  // we need here writer this writer can get from 
+	//StringWriter to display on console 
+	//FileWriter to export html file to destination path
+	  StringWriter writer = new StringWriter();
+	  template.merge(velocityContext, writer);
+	  System.out.println(writer.toString());
+	  
+	  return writer.toString();
+	
+//	try {
+//		 FileWriter writer1 = new FileWriter(new File("src/main/resources/newhtml.html"));
+//		 template.merge(velocityContext, writer1);
+//		 writer1.flush();
+//		 writer1.close();
+//		 
+//	} catch (IOException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+  
   }
 }
 
